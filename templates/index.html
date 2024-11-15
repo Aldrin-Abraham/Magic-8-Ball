@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
+    <title>Magic 8 Ball</title>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Magic 8 Ball</h1>
+        <div id="ball-container">
+            <div class="ball">
+                <div class="inner-circle">
+                    <p class="number-eight">8</p>
+                </div>
+                <div class="answer-triangle" id="answer-triangle">
+                    <p id="ball-answer">Ask a question!</p>
+                </div>
+            </div>
+            <div class="shadow"></div>
+        </div>
+
+        <div id="ask-section">
+            <input type="text" id="question" placeholder="Ask a yes or no question...">
+            <button id="ask-button">Ask the Magic 8 Ball</button>
+        </div>
+    </div>
+
+    <audio id="magic-sound" src="{{ url_for('static', filename='magic-sound.mp3') }}"></audio>
+
+    <script>
+        document.getElementById("ask-button").addEventListener("click", function () {
+            const question = document.getElementById("question").value;
+            if (!question) {
+                alert("Please ask a question!");
+                return;
+            }
+
+            const magicSound = document.getElementById("magic-sound");
+
+            // Ensure sound is loaded
+            magicSound.load();
+            magicSound.play(); // Play sound effect
+
+            const ballContainer = document.getElementById("ball-container");
+            const ballAnswer = document.getElementById("ball-answer");
+
+            ballContainer.classList.remove("rotate");
+            ballAnswer.style.opacity = 0;
+
+            // Trigger rotation animation
+            ballContainer.classList.add("rotate");
+
+            fetch("/ask")
+                .then(response => response.json())
+                .then(data => {
+                    setTimeout(() => {
+                        ballAnswer.textContent = data.answer;
+                        ballAnswer.style.opacity = 1;
+                    }, 1200);
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    setTimeout(() => {
+                        ballAnswer.textContent = "Something went wrong!";
+                        ballAnswer.style.opacity = 1;
+                    }, 1200);
+                });
+        });
+    </script>
+</body>
+
+</html>
