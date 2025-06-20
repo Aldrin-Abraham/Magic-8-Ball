@@ -1,0 +1,193 @@
+/* Body styling */
+body {
+  background: url('background.jpg') no-repeat center center fixed;
+  background-size: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  color: #ffffff;
+  overflow: hidden;
+}
+
+/* Main container */
+.container {
+  text-align: center;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  width: 90%;
+  max-width: 350px;
+}
+
+/* Header styling */
+h1 {
+  font-size: 2.2rem;
+  color: rgb(0, 174, 255);
+  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.8);
+}
+
+/* Ball container */
+#ball-container {
+  position: relative;
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+}
+
+/* Ball styling */
+.ball {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 75% 30%, #333 5%, #000 90%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  animation: float 3.5s ease-in-out infinite;
+  box-shadow: inset 0 0 20px #444,
+              inset 0 0 40px rgba(0, 0, 0, 0.7),
+              inset -10px -20px 50px rgba(0, 0, 0, 0.8),
+              0 0 15px rgba(255, 255, 255, 0.2);
+  transition: transform 1s ease;
+}
+
+/* Inner circle with "8" */
+.inner-circle {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: black;
+  font-size: 2.5rem;
+  font-weight: bold;
+  text-align: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  transition: opacity 1.5s ease, visibility 1.5s ease;
+  opacity: 1;
+  visibility: visible;
+}
+
+/* "8" styling */
+.number-eight {
+  font-size: 2.5rem;
+  font-family: Arial, sans-serif;
+  color: black;
+}
+
+/* Answer triangle container */
+.answer-triangle {
+  position: absolute;
+  width: 120px;
+  height: 120px;
+  background: #000;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 1.5s ease, visibility 1.5s ease;
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* Answer text in center of black circle */
+#ball-answer {
+  color: white;
+  font-size: 0.9rem;
+  font-weight: bold;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  padding: 0 10px;
+  opacity: 0;
+  transition: opacity 1.5s ease;
+}
+
+/* Shadow under the ball */
+.shadow {
+  position: absolute;
+  width: 120px;
+  height: 20px;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 50%;
+  top: 260px;
+  animation: shadowExpand 3.5s ease-in-out infinite;
+}
+
+/* Floating animation */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+/* Shadow expansion animation */
+@keyframes shadowExpand {
+  0%, 100% {
+    transform: scale(0.9);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+/* Ask section styling */
+#ask-section {
+  margin-top: 25px;
+}
+
+#question {
+  width: 90%;
+  padding: 12px;
+  border: 2px solid rgb(0, 174, 255);
+  border-radius: 5px;
+  margin-bottom: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  font-size: 1rem;
+}
+
+#ask-button {
+  padding: 10px 20px;
+  background-color: rgb(0, 174, 255);
+  border: none;
+  border-radius: 5px;
+  color: #000;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#ask-button:hover {
+  background-color: #4c006f;
+}
+
+/* Responsive tweaks */
+@media only screen and (max-width: 500px) {
+  .ball {
+    height: 120px;
+    width: 120px;
+  }
+
+  .shadow {
+    width: 90px;
+    height: 15px;
+    top: 140px;
+  }
+
+  #question {
+    width: 100%;
+  }
+}
