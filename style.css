@@ -1,193 +1,279 @@
 /* Body styling */
 body {
-  background: url('background.jpg') no-repeat center center fixed;
-  background-size: cover;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  margin: 0;
-  font-family: Arial, sans-serif;
-  color: #ffffff;
-  overflow: hidden;
+    background: url('images/background.jpg') no-repeat center center fixed;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    color: #ffffff;
+    overflow: hidden;
 }
 
-/* Main container */
-.container {
-  text-align: center;
-  background: rgba(0, 0, 0, 0.7);
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
-  width: 90%;
-  max-width: 350px;
+/* Content wrapper */
+.content-wrapper {
+    text-align: center;
+    width: 90%;
+    max-width: 350px;
+    margin-top: -40px; /* Move everything up */
 }
 
-/* Header styling */
-h1 {
-  font-size: 2.2rem;
-  color: rgb(0, 174, 255);
-  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.8);
+/* Header image with blur effect */
+.header-image {
+    max-width: 60%;
+    margin-bottom: 30px; /* Adjusted spacing */
+    filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.7));
+    position: relative;
+}
+
+.header-image::before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    background: inherit;
+    filter: blur(8px);
+    z-index: -1;
+    opacity: 0.7;
 }
 
 /* Ball container */
 #ball-container {
-  position: relative;
-  margin-top: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 300px;
+    position: relative;
+    margin-top: 10px; /* Reduced top margin */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 250px; /* Reduced height */
+    perspective: 1000px;
 }
 
 /* Ball styling */
 .ball {
-  width: 200px;
-  height: 200px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 75% 30%, #333 5%, #000 90%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  animation: float 3.5s ease-in-out infinite;
-  box-shadow: inset 0 0 20px #444,
-              inset 0 0 40px rgba(0, 0, 0, 0.7),
-              inset -10px -20px 50px rgba(0, 0, 0, 0.8),
-              0 0 15px rgba(255, 255, 255, 0.2);
-  transition: transform 1s ease;
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 75% 30%, #333 5%, #000 90%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    animation: float 3.5s ease-in-out infinite;
+    box-shadow: inset 0 0 20px #444,
+                inset 0 0 40px rgba(0, 0, 0, 0.7),
+                inset -10px -20px 50px rgba(0, 0, 0, 0.8),
+                0 0 15px rgba(255, 255, 255, 0.2);
+    transition: transform 1s ease, width 1.5s ease, height 1.5s ease;
+    overflow: hidden;
+    z-index: 10;
+}
+
+/* 3D overlay for rotation effect */
+.ball-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: url('images/overlay.jpg') repeat-x;
+    background-size: auto 100%;
+    opacity: 0.7;
+    left: 0;
+    top: 0;
 }
 
 /* Inner circle with "8" */
 .inner-circle {
-  position: absolute;
-  width: 80px;
-  height: 80px;
-  background: white;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: black;
-  font-size: 2.5rem;
-  font-weight: bold;
-  text-align: center;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  transition: opacity 1.5s ease, visibility 1.5s ease;
-  opacity: 1;
-  visibility: visible;
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: black;
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    transition: opacity 1.5s ease, visibility 1.5s ease;
+    opacity: 1;
+    visibility: visible;
+    z-index: 2;
 }
 
 /* "8" styling */
 .number-eight {
-  font-size: 2.5rem;
-  font-family: Arial, sans-serif;
-  color: black;
+    font-size: 2.5rem;
+    font-family: Arial, sans-serif;
+    color: black;
 }
 
 /* Answer triangle container */
 .answer-triangle {
-  position: absolute;
-  width: 120px;
-  height: 120px;
-  background: #000;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: opacity 1.5s ease, visibility 1.5s ease;
-  opacity: 0;
-  visibility: hidden;
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    background: #000;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 1.5s ease, visibility 1.5s ease;
+    opacity: 0;
+    visibility: hidden;
+    z-index: 1;
 }
 
 /* Answer text in center of black circle */
 #ball-answer {
-  color: white;
-  font-size: 0.9rem;
-  font-weight: bold;
-  font-family: Arial, sans-serif;
-  text-align: center;
-  padding: 0 10px;
-  opacity: 0;
-  transition: opacity 1.5s ease;
+    color: white;
+    font-size: 0.9rem;
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 0 10px;
+    opacity: 0;
+    transition: opacity 1.5s ease;
 }
 
-/* Shadow under the ball */
+/* Shadow under the ball - CORRECTED POSITION */
 .shadow {
-  position: absolute;
-  width: 120px;
-  height: 20px;
-  background: rgba(0, 0, 0, 0.4);
-  border-radius: 50%;
-  top: 260px;
-  animation: shadowExpand 3.5s ease-in-out infinite;
+    position: absolute;
+    width: 120px;
+    height: 20px;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 50%;
+    top: 230px; /* Corrected position to match initial stage */
+    animation: shadowExpand 3.5s ease-in-out infinite;
+    transition: width 1.5s ease, height 1.5s ease, top 1.5s ease;
 }
 
 /* Floating animation */
 @keyframes float {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-20px);
-  }
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-15px); /* Reduced floating distance */
+    }
 }
 
 /* Shadow expansion animation */
 @keyframes shadowExpand {
-  0%, 100% {
-    transform: scale(0.9);
-  }
-  50% {
-    transform: scale(1.1);
-  }
+    0%, 100% {
+        transform: scale(0.9);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+/* SMOOTH SLOW ROTATION */
+@keyframes smoothSlowRotate {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: -400px 0;
+    }
+}
+
+.ball.rotating .ball-overlay {
+    animation: smoothSlowRotate 7s linear infinite;
 }
 
 /* Ask section styling */
 #ask-section {
-  margin-top: 25px;
+    margin-top: 20px; /* Reduced top margin */
+    transition: opacity 0.8s ease, visibility 0.8s ease;
 }
 
 #question {
-  width: 90%;
-  padding: 12px;
-  border: 2px solid rgb(0, 174, 255);
-  border-radius: 5px;
-  margin-bottom: 10px;
-  background: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
-  font-size: 1rem;
+    width: 90%;
+    padding: 12px;
+    border: 2px solid rgb(0, 174, 255);
+    border-radius: 5px;
+    margin-bottom: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    font-size: 1rem;
 }
 
 #ask-button {
-  padding: 10px 20px;
-  background-color: rgb(0, 174, 255);
-  border: none;
-  border-radius: 5px;
-  color: #000;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+    padding: 10px 20px;
+    background-color: rgb(0, 174, 255);
+    border: none;
+    border-radius: 5px;
+    color: #000;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 #ask-button:hover {
-  background-color: #4c006f;
+    background-color: #4c006f;
+}
+
+/* Hide elements class */
+.hide-elements #ask-section {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+
+.content-wrapper:not(.hide-elements) #ask-section {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.8s ease 0.5s, visibility 0.8s ease 0.5s;
 }
 
 /* Responsive tweaks */
 @media only screen and (max-width: 500px) {
-  .ball {
-    height: 120px;
-    width: 120px;
-  }
+    .content-wrapper {
+        margin-top: -20px; /* Adjusted for mobile */
+    }
+    
+    .header-image {
+        max-width: 70%; /* Increased header size for mobile */
+        margin-bottom: 20px;
+    }
+    
+    .ball {
+        height: 120px;
+        width: 120px;
+    }
 
-  .shadow {
-    width: 90px;
-    height: 15px;
-    top: 140px;
-  }
+    .inner-circle {
+        width: 50px;
+        height: 50px;
+    }
 
-  #question {
-    width: 100%;
-  }
+    .number-eight {
+        font-size: 1.8rem;
+    }
+
+    .shadow {
+        width: 90px;
+        height: 15px;
+        top: 130px; /* Corrected mobile position */
+    }
+
+    #question {
+        width: 100%;
+    }
+    
+    /* Adjust rotation for mobile */
+    @keyframes smoothSlowRotate {
+        0% {
+            background-position: 0 0;
+        }
+        100% {
+            background-position: -240px 0;
+        }
+    }
 }
