@@ -1,19 +1,17 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/style.css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Magic 8 Ball</title>
+    <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-    <div class="container">
-        <h1>Magic 8 Ball</h1>
+    <div class="content-wrapper">
+        <img src="images/header.png" alt="Magic 8 Ball" class="header-image">
         <div id="ball-container">
             <div class="ball">
+                <div class="ball-overlay"></div>
                 <div class="inner-circle">
                     <p class="number-eight">8</p>
                 </div>
@@ -30,68 +28,7 @@
         </div>
     </div>
 
-    <audio id="magic-sound" src="/sound.mp3"></audio>
-
-    <script>
-        document.getElementById("ask-button").addEventListener("click", function () {
-            const question = document.getElementById("question").value;
-            if (!question.trim()) {
-                alert("Please ask a question!");
-                return;
-            }
-
-            const answers = [
-                "Yes, definitely", "Yes, absolutely", "You can count on it",
-                "Most likely", "Yes", "Outlook good", "Yes, in due time",
-                "Without a doubt", "Definitely not", "My sources say yes",
-                "No", "No, not at all", "My sources say no", "Very unlikely",
-                "Don't count on it", "Ask again later", "Cannot predict now",
-                "Concentrate and ask again", "Not sure, try again", "My reply is no"
-            ];
-
-            const randomAnswer = answers[Math.floor(Math.random() * answers.length)];
-            const magicSound = document.getElementById("magic-sound");
-            const ballAnswer = document.getElementById("ball-answer");
-            const ball = document.querySelector(".ball");
-            const innerCircle = document.querySelector(".inner-circle");
-            const answerTriangle = document.querySelector(".answer-triangle");
-
-            // Start everything
-            magicSound.currentTime = 0;
-            magicSound.play();
-            ball.classList.add("rotate");
-
-            // STEP 1: fade out white circle and 8 (1.5s)
-            innerCircle.style.opacity = "0";
-            innerCircle.style.visibility = "hidden";
-
-            // STEP 2: wait 4s (1.5s fade out + 2.5s delay) → then show answer
-            setTimeout(() => {
-                ballAnswer.textContent = randomAnswer;
-                answerTriangle.style.opacity = "1";
-                answerTriangle.style.visibility = "visible";
-                ballAnswer.style.opacity = "1";
-            }, 4000);
-
-            // STEP 3: after 9s total → fade out answer
-            setTimeout(() => {
-                answerTriangle.style.opacity = "0";
-                ballAnswer.style.opacity = "0";
-                answerTriangle.style.visibility = "hidden";
-            }, 9000);
-
-            // STEP 4: after 10.5s → restore 8-circle
-            setTimeout(() => {
-                innerCircle.style.opacity = "1";
-                innerCircle.style.visibility = "visible";
-                ball.classList.remove("rotate");
-                magicSound.pause();
-                magicSound.currentTime = 0;
-            }, 10500);
-        });
-    </script>
-
+    <audio id="sound" src="sound.mp3"></audio>
+    <script src="script.js"></script>
 </body>
-
-
 </html>
