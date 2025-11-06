@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Magic 8 Ball</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <div class="content-wrapper">
@@ -23,8 +24,33 @@
         </div>
 
         <div id="ask-section">
-            <input type="text" id="question" placeholder="Ask a yes or no question...">
-            <button id="ask-button">Ask the Magic 8 Ball</button>
+            <div class="chat-input-container" id="chat-input-container">
+                <input
+                    type="text"
+                    class="chat-input"
+                    id="question"
+                    placeholder="Ask Magic8Ball"
+                />
+                
+                <button class="icon-btn" id="voice-btn" title="Speak">
+                    <i class="fas fa-microphone icon"></i>
+                </button>
+                <button class="icon-btn send-btn" id="ask-button" title="Ask Magic8Ball" disabled>
+                    <i class="fas fa-paper-plane icon"></i>
+                </button>
+            </div>
+            
+            <!-- Voice Animation -->
+            <div class="voice-animation-container" id="voiceAnimation">
+                <div class="voice-loader" id="voiceLoader">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+                <div class="voice-status" id="voiceStatus">Listening...</div>
+            </div>
         </div>
     </div>
 
