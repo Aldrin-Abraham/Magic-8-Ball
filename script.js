@@ -1,4 +1,12 @@
 document.addEventListener('DOMContentLoaded', function() {
+    // Mobile detection function
+    function isMobileDevice() {
+        return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+               (window.innerWidth <= 768 && window.innerHeight <= 1024);
+    }
+
+    const isMobile = isMobileDevice();
+
     const askButton = document.getElementById("ask-button");
     const questionInput = document.getElementById("question");
     const magicSound = document.getElementById("sound");
@@ -17,15 +25,20 @@ document.addEventListener('DOMContentLoaded', function() {
     const voiceAnimation = document.getElementById('voiceAnimation');
     const voiceLoader = document.getElementById('voiceLoader');
     const voiceStatus = document.getElementById('voiceStatus');
-    const voiceBars = voiceLoader.querySelectorAll('div');
+    const voiceBars = voiceLoader ? voiceLoader.querySelectorAll('div') : [];
 
-    // Voice animation variables
+    // Voice animation variables (for desktop only)
     let audioContext;
     let analyser;
     let microphone;
     let javascriptNode;
     let isVoiceActive = false;
     let voiceRecognitionTimeout;
+
+    // Hide voice animation on mobile
+    if (isMobile) {
+        voiceAnimation.style.display = 'none';
+    }
 
     // Initialize button state
     updateSendButtonState();
@@ -36,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function() {
         askButton.disabled = !hasText;
     }
 
-    // Voice recognition functionality with animation
+    // Voice recognition functionality
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     
     if (SpeechRecognition) {
@@ -54,6 +67,29 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         function startVoiceRecognition() {
+            if (isMobile) {
+                // Simple voice recognition for mobile
+                startSimpleVoiceRecognition();
+            } else {
+                // Full visualizer for desktop
+                startDesktopVoiceRecognition();
+            }
+        }
+
+        function startSimpleVoiceRecognition() {
+            try {
+                recognition.start();
+                voiceBtn.classList.add('recording');
+                isVoiceActive = true;
+                voiceBtn.title = "Listening... Click to stop";
+            } catch (error) {
+                console.error('Speech recognition error:', error);
+                alert('Error starting voice recognition. Please try again.');
+                stopVoiceRecognition();
+            }
+        }
+
+        function startDesktopVoiceRecognition() {
             // Smooth transition: hide search bar first
             chatInputContainer.classList.remove('visible');
             chatInputContainer.classList.add('hidden');
@@ -96,87 +132,42 @@ document.addEventListener('DOMContentLoaded', function() {
         function stopVoiceRecognition() {
             clearTimeout(voiceRecognitionTimeout);
             
-            // First fade out voice animation
-            voiceAnimation.classList.remove('active');
-            voiceAnimation.classList.add('fade-out');
-            
-            // Stop voice visualization
-            stopVoiceVisualization();
+            if (!isMobile) {
+                // First fade out voice animation (desktop only)
+                voiceAnimation.classList.remove('active');
+                voiceAnimation.classList.add('fade-out');
+                
+                // Stop voice visualization (desktop only)
+                stopVoiceVisualization();
+                
+                // Wait for fade-out animation to complete, then show search bar
+                setTimeout(() => {
+                    chatInputContainer.classList.remove('hidden');
+                    chatInputContainer.classList.add('visible');
+                    
+                    // Reset voice status for next use
+                    setTimeout(() => {
+                        voiceStatus.className = "voice-status";
+                        voiceStatus.style.color = "";
+                    }, 500);
+                }, 300);
+            }
             
             voiceBtn.classList.remove('recording');
             isVoiceActive = false;
+            voiceBtn.title = "Speak your question";
             
             try {
                 recognition.stop();
             } catch (error) {
                 // Ignore stop errors
             }
-            
-            // Wait for fade-out animation to complete, then show search bar
-            setTimeout(() => {
-                chatInputContainer.classList.remove('hidden');
-                chatInputContainer.classList.add('visible');
-                
-                // Reset voice status for next use
-                setTimeout(() => {
-                    voiceStatus.className = "voice-status";
-                    voiceStatus.style.color = "";
-                }, 500);
-                
-            }, 300);
         }
 
-        recognition.onresult = (event) => {
-            clearTimeout(voiceRecognitionTimeout);
-            const transcript = event.results[0][0].transcript;
-            console.log('Speech recognized:', transcript);
-            
-            // Update the input field
-            questionInput.value = transcript;
-            
-            // Update send button state
-            updateSendButtonState();
-            
-            // Show success message with smooth animation
-            voiceStatus.textContent = "Question received!";
-            voiceStatus.classList.add('success');
-            
-            // Wait a moment then close animation and show search bar
-            setTimeout(() => {
-                stopVoiceRecognition();
-            }, 1200);
-        };
-        
-        recognition.onend = () => {
-            if (isVoiceActive) {
-                // Only stop if we're still active (not already stopping)
-                setTimeout(stopVoiceRecognition, 100);
-            }
-        };
-
-        recognition.onerror = (event) => {
-            clearTimeout(voiceRecognitionTimeout);
-            console.error('Speech recognition error:', event.error);
-            
-            if (event.error === 'no-speech') {
-                voiceStatus.textContent = "No speech detected";
-            } else if (event.error === 'audio-capture') {
-                voiceStatus.textContent = "No microphone found";
-            } else if (event.error === 'not-allowed') {
-                voiceStatus.textContent = "Microphone access denied";
-            } else {
-                voiceStatus.textContent = "Error: " + event.error;
-            }
-            
-            voiceStatus.classList.add('error');
-            
-            setTimeout(() => {
-                stopVoiceRecognition();
-            }, 2000);
-        };
-
-        // Voice visualization functions
+        // Voice visualization functions (desktop only)
         function startVoiceVisualization() {
+            if (isMobile) return;
+            
             isVoiceActive = true;
             
             if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
@@ -224,6 +215,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         function stopVoiceVisualization() {
+            if (isMobile) return;
+            
             if (javascriptNode) {
                 javascriptNode.disconnect();
             }
@@ -248,6 +241,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         function updateVoiceBars(volume) {
+            if (isMobile) return;
+            
             const maxHeight = 30;
             const baseHeight = 12;
             const normalizedVolume = Math.min(volume / 100, 1);
@@ -274,12 +269,86 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
 
+        recognition.onresult = (event) => {
+            clearTimeout(voiceRecognitionTimeout);
+            const transcript = event.results[0][0].transcript;
+            console.log('Speech recognized:', transcript);
+            
+            // Update the input field
+            questionInput.value = transcript;
+            
+            // Update send button state
+            updateSendButtonState();
+            
+            if (!isMobile) {
+                // Show success message with smooth animation (desktop only)
+                voiceStatus.textContent = "Question received!";
+                voiceStatus.classList.add('success');
+                
+                // Wait a moment then close animation and show search bar
+                setTimeout(() => {
+                    stopVoiceRecognition();
+                }, 1200);
+            } else {
+                // Mobile: stop immediately
+                stopVoiceRecognition();
+                
+                // Auto-focus on input after voice input for mobile
+                setTimeout(() => {
+                    questionInput.focus();
+                }, 100);
+            }
+        };
+        
+        recognition.onend = () => {
+            if (isVoiceActive) {
+                // Only stop if we're still active (not already stopping)
+                setTimeout(stopVoiceRecognition, 100);
+            }
+        };
+
+        recognition.onerror = (event) => {
+            clearTimeout(voiceRecognitionTimeout);
+            console.error('Speech recognition error:', event.error);
+            
+            if (isMobile) {
+                // Simple error handling for mobile
+                let errorMessage = "Voice recognition error";
+                if (event.error === 'audio-capture') {
+                    errorMessage = "No microphone found";
+                } else if (event.error === 'not-allowed') {
+                    errorMessage = "Microphone access denied";
+                } else {
+                    errorMessage = "Error: " + event.error;
+                }
+                alert(errorMessage);
+                stopVoiceRecognition();
+            } else {
+                // Desktop error handling with visual feedback
+                if (event.error === 'audio-capture') {
+                    voiceStatus.textContent = "No microphone found";
+                } else if (event.error === 'not-allowed') {
+                    voiceStatus.textContent = "Microphone access denied";
+                } else {
+                    voiceStatus.textContent = "Error: " + event.error;
+                }
+                
+                voiceStatus.classList.add('error');
+                
+                setTimeout(() => {
+                    stopVoiceRecognition();
+                }, 2000);
+            }
+        };
+
     } else {
+        // Browser doesn't support speech recognition
         voiceBtn.addEventListener('click', () => {
             alert('Voice recognition is not supported in this browser. Please use Chrome, Edge, or another supported browser.');
         });
         voiceBtn.style.opacity = '0.5';
         voiceBtn.style.cursor = 'not-allowed';
+        voiceBtn.title = 'Voice input not supported';
     }
 
     // Handle Enter key press
